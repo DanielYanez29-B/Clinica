@@ -19,8 +19,8 @@ public class ReglaHorarioLaboral {
             throw new RuntimeException("La clinica ya esta cerrada. Cerramos a las " + cierre);
 
         }
+        if (!horaCita.isBefore(LocalTime.of(14, 0)) && horaCita.isBefore(LocalTime.of(16, 0))) {
+            throw new RuntimeException("La clínica está cerrada por horario de comida (14:00 - 16:00).");
+        }
     }
-
-
-
 }

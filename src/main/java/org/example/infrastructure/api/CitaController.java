@@ -4,7 +4,7 @@ import org.example.application.UseCases.ActualizarCitaUseCase;
 import org.example.application.UseCases.AgendarCitaUseCase;
 import org.example.application.UseCases.ConsultarCitasUseCase;
 import org.example.application.UseCases.EliminarCitaUseCase;
-import org.example.domain.Cita;
+import org.example.domain.model.Cita;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

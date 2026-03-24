@@ -1,11 +1,12 @@
 package org.example.application.UseCases;
 
 import org.example.application.CitaRepositoryPort;
-import org.example.domain.Cita;
+import org.example.domain.model.Cita;
 import org.example.domain.rules.ReglaHorarioLaboral;
-import org.springframework.stereotype.Service;
+import org.example.domain.rules.ReglaSinEmpalmes;
 
 import java.time.LocalTime;
+import java.util.List;
 
 
 public class AgendarCitaUseCase {
@@ -22,6 +23,11 @@ public class AgendarCitaUseCase {
         LocalTime hora = cita.getFechaHora().toLocalTime();
         reglaHorario.validar(hora);
 
+        List<Cita> citasDelDia = citaRepository.obtenerPorFecha(cita.getFechaHora().toLocalDate());
+        new ReglaSinEmpalmes().validar(cita, citasDelDia);
+
         return citaRepository.guardar(cita);
     }
+
+
 }

@@ -1,7 +1,7 @@
 package org.example.application.UseCases;
 
 import org.example.application.CitaRepositoryPort;
-import org.example.domain.Cita;
+import org.example.domain.model.Cita;
 import org.example.domain.rules.ReglaHorarioLaboral;
 
 public class ActualizarCitaUseCase {

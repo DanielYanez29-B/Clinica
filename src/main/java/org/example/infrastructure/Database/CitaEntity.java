@@ -1,6 +1,7 @@
 package org.example.infrastructure.Database;
 
 import jakarta.persistence.*;
+import org.example.domain.model.Especialidad;
 
 import java.time.LocalDateTime;
 
@@ -16,12 +17,16 @@ public class CitaEntity {
 
     private LocalDateTime fechaHora;
 
+    @Enumerated(EnumType.STRING)
+    private Especialidad especialidad;
+
     public CitaEntity() {
     }
 
-    public CitaEntity(String nombrePaciente, LocalDateTime fechaHora) {
+    public CitaEntity(String nombrePaciente, LocalDateTime fechaHora, Especialidad especialidad) {
         this.nombrePaciente = nombrePaciente;
         this.fechaHora = fechaHora;
+        this.especialidad = especialidad;
     }
 
     public Long getId() { return id; }
@@ -30,6 +35,7 @@ public class CitaEntity {
     public void setNombrePaciente(String nombrePaciente) { this.nombrePaciente = nombrePaciente; }
     public LocalDateTime getFechaHora() { return fechaHora; }
     public void setFechaHora(LocalDateTime fechaHora) { this.fechaHora = fechaHora; }
-
+    public Especialidad getEspecialidad() { return especialidad; }
+    public void setEspecialidad(Especialidad especialidad) { this.especialidad = especialidad; }
 
 }

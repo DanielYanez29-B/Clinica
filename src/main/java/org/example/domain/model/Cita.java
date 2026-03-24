@@ -1,17 +1,21 @@
-package org.example.domain;
+package org.example.domain.model;
 
 import java.time.LocalDateTime;
 
 public class Cita {
 
-    private long id;
+    private Long id;
     private String nombrePaciente;
     private LocalDateTime fechaHora;
+    private Especialidad especialidad;
 
-    public Cita(long id, String nombrePaciente, LocalDateTime fechaHora) {
+    public Cita(long id, String nombrePaciente, LocalDateTime fechaHora, Especialidad especialidad) {
         this.id = id;
         this.nombrePaciente = nombrePaciente;
         this.fechaHora = fechaHora;
+        this.especialidad = especialidad;
+
+
     }
 
     //Constructor sin ID
@@ -22,7 +26,7 @@ public class Cita {
 
     public Cita(){}
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -44,5 +48,16 @@ public class Cita {
 
     public void setFechaHora(LocalDateTime fechaHora) {
         this.fechaHora = fechaHora;
+    }
+
+    public Especialidad getEspecialidad() {
+        return especialidad;
+    }
+
+    public LocalDateTime getFechaHoraFin() {
+        if (this.fechaHora != null && this.especialidad != null) {
+            return this.fechaHora.plusMinutes(this.especialidad.getDuracionMinutos());
+        }
+        return null;
     }
 }
