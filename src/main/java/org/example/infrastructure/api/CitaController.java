@@ -4,7 +4,9 @@ import org.example.application.UseCases.ActualizarCitaUseCase;
 import org.example.application.UseCases.AgendarCitaUseCase;
 import org.example.application.UseCases.ConsultarCitasUseCase;
 import org.example.application.UseCases.EliminarCitaUseCase;
+import org.example.domain.exception.CitaNoEncontradaException;
 import org.example.domain.model.Cita;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +33,7 @@ public class CitaController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Cita agendarNuevaCita(@RequestBody Cita nuevaCita) {
         return useCase.ejecutar(nuevaCita);
     }
@@ -54,5 +57,10 @@ public class CitaController {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> manejarExcepciones(RuntimeException ex) {
         return ResponseEntity.badRequest().body("No se pudo agendar: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(CitaNoEncontradaException.class)
+    public ResponseEntity<String> manejarNoEncontrado(CitaNoEncontradaException ex) {
+        return ResponseEntity.status(404).body(ex.getMessage());
     }
 }

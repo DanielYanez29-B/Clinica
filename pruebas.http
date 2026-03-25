@@ -1,11 +1,62 @@
+### 1. Agendar una cita (Paciente NUEVO -> Debe quedar PAGADA)
 POST http://localhost:8080/api/citas
 Content-Type: application/json
 
 {
   "paciente": {
-    "nombre": "Don Roberto",
+    "nombre": "Juan Perez",
     "tipo": "NUEVO"
   },
   "fechaHora": "2026-03-25T10:00:00",
   "especialidad": "CARDIOLOGO"
+}
+
+> {%
+    client.test("Estado debe ser PAGADA", function() {
+        client.assert(response.body.estadoCita === "PAGADA", "El estado no es PAGADA");
+    });
+%}
+
+### 2. Agendar una cita (Paciente RECURRENTE -> Debe quedar PENDIENTE)
+POST http://localhost:8080/api/citas
+Content-Type: application/json
+
+{
+  "paciente": {
+    "nombre": "Maria Garcia",
+    "tipo": "RECURRENTE"
+  },
+  "fechaHora": "2026-03-25T11:00:00",
+  "especialidad": "PSICOLOGA"
+}
+
+### 3. Prueba de Regla de Negocio (Fuera de horario -> Debe dar ERROR 400)
+POST http://localhost:8080/api/citas
+Content-Type: application/json
+
+{
+  "paciente": {
+    "nombre": "Noctambulo",
+    "tipo": "NUEVO"
+  },
+  "fechaHora": "2026-03-25T23:00:00",
+  "especialidad": "PSICOLOGA"
+}
+
+### 4. Consultar todas las citas
+GET http://localhost:8080/api/citas
+
+### 5. Actualizar una cita (Cambiando estado manualmente)
+# Reemplaza el UUID por uno que te devuelva el GET anterior
+PUT http://localhost:8080/api/citas/a906fe8e-05ec-4e83-bd00-146503d47109
+Content-Type: application/json
+
+{
+  "paciente": {
+    "nombre": "Juan Perez Actualizado",
+    "tipo": "RECURRENTE"
+  },
+  "fechaHora": "2026-03-25T10:30:00",
+  "especialidad": "PSICOLOGA",
+  "estadoCita": "PAGADA"
 }

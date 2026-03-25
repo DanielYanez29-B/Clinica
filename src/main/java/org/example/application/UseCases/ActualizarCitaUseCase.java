@@ -17,6 +17,7 @@ public class ActualizarCitaUseCase {
 
     public Cita ejecutar(UUID id, Cita cita) {
         reglaHorario.validar(cita.getFechaHora().toLocalTime());
+        cita.setId(id);
         return citaRepository.actualizar(id, cita);
     }
 }

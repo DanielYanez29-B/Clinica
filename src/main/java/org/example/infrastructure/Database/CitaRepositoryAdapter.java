@@ -1,10 +1,10 @@
 package org.example.infrastructure.Database;
 
+import org.example.domain.exception.CitaNoEncontradaException;
 import org.example.domain.model.Cita;
 import org.example.application.CitaRepositoryPort;
 import org.example.domain.model.Paciente;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -33,7 +33,8 @@ public class CitaRepositoryAdapter implements CitaRepositoryPort {
                 cita.getId(),
                 pacienteEntity,
                 cita.getFechaHora(),
-                cita.getEspecialidad()
+                cita.getEspecialidad(),
+                cita.getEstadoCita()
         );
 
         CitaEntity guardada = repository.save(entity);
@@ -65,8 +66,25 @@ public class CitaRepositoryAdapter implements CitaRepositoryPort {
 
     @Override
     public Cita actualizar(UUID id, Cita cita) {
-        // La lógica de actualizar la revisaremos después, por ahora que compile:
-        return guardar(cita);
+        Optional<CitaEntity> entidadExistente = repository.findById(id);
+        if (entidadExistente.isEmpty()) {
+            throw new CitaNoEncontradaException("Cita con ID " + id + " no encontrada.");
+        }
+
+        CitaEntity entity = entidadExistente.get();
+
+        entity.setFechaHora(cita.getFechaHora());
+        entity.setEspecialidad(cita.getEspecialidad());
+        entity.setEstadoCita(cita.getEstadoCita());
+
+        PacienteEntity pacienteEntity = entity.paciente();
+        if (pacienteEntity != null) {
+            pacienteEntity.setNombre(cita.getPaciente().getNombre());
+            pacienteEntity.setTipo(cita.getPaciente().getTipo());
+        }
+
+        CitaEntity actualizada = repository.save(entity);
+        return mapearADominio(actualizada);
     }
 
     @Override
@@ -81,12 +99,15 @@ public class CitaRepositoryAdapter implements CitaRepositoryPort {
                 entidad.paciente().getTipo()
         );
 
-        return new Cita(
+        Cita citaDominio = new Cita(
                 entidad.getId(),
                 paciente,
                 entidad.getFechaHora(),
                 entidad.getEspecialidad()
         );
+        citaDominio.setEstadoCita(entidad.getEstadoCita());
+
+        return citaDominio;
     }
 
 

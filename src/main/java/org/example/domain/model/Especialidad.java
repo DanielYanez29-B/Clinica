@@ -1,19 +1,25 @@
 package org.example.domain.model;
 
+import org.example.domain.model.valueobjects.Dinero;
+
 public enum Especialidad {
-    MEDICO_GENERAL(30, 0),
-    CARDIOLOGO(45, 0),
-    PSICOLOGA(50, 10);
+    MEDICO_GENERAL(30, Dinero.de(500.0)),
+    CARDIOLOGO(45, Dinero.de(900.0)),
+    PSICOLOGA(60, Dinero.de(700.0));
 
-    private final int minutosConsulta;
-    private final int minutosDescanso;
+    private final int duracioMinutos;
+    private final Dinero costoBase;
 
-    Especialidad(int minutosConsulta, int minutosDescanso) {
-        this.minutosConsulta = minutosConsulta;
-        this.minutosDescanso = minutosDescanso;
+    Especialidad(int duracioMinutos, Dinero costoBase) {
+        this.duracioMinutos = duracioMinutos;
+        this.costoBase = costoBase;
     }
 
     public int getDuracionMinutos() {
-        return minutosConsulta + minutosDescanso;
+        return duracioMinutos;
     }
+    public Dinero getCostoBase() {
+        return costoBase;
+    }
+
 }

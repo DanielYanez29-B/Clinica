@@ -1,5 +1,7 @@
 package org.example.domain.model;
 
+import org.example.domain.model.valueobjects.Dinero;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -9,23 +11,26 @@ public class Cita {
     private Paciente paciente;
     private LocalDateTime fechaHora;
     private Especialidad especialidad;
+    private EstadoCita estadoCita;
 
     public Cita(UUID id, Paciente paciente, LocalDateTime fechaHora, Especialidad especialidad) {
         this.id = id;
         this.paciente = paciente;
         this.fechaHora = fechaHora;
         this.especialidad = especialidad;
-
-
+        definirEstadoInicial();
     }
 
     //Constructor sin ID
-    public Cita(Paciente paciente, LocalDateTime fechaHora) {
+    public Cita(Paciente paciente, LocalDateTime fechaHora, Especialidad especialidad) {
         this.paciente = paciente;
         this.fechaHora = fechaHora;
+        this.especialidad = especialidad;
+        definirEstadoInicial();
     }
 
-    public Cita(){}
+    public Cita() {
+    }
 
     public UUID getId() {
         return id;
@@ -39,7 +44,7 @@ public class Cita {
         return paciente;
     }
 
-    public void setNombrePaciente(String nombrePaciente) {
+    public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
     }
 
@@ -60,5 +65,25 @@ public class Cita {
             return this.fechaHora.plusMinutes(this.especialidad.getDuracionMinutos());
         }
         return null;
+    }
+
+    public EstadoCita getEstadoCita() {
+        return estadoCita;
+    }
+
+    public void setEstadoCita(EstadoCita estadoCita) {
+        this.estadoCita = estadoCita;
+    }
+
+    public Dinero calcularTotal() {
+        return this.especialidad.getCostoBase();
+    }
+
+    private void definirEstadoInicial() {
+        if (this.paciente != null && this.paciente.getTipo() != null) {
+            this.estadoCita = (this.paciente.getTipo() == TipoPaciente.NUEVO)
+                    ? EstadoCita.PAGADA
+                    : EstadoCita.PENDIENTE;
+        }
     }
 }

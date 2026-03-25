@@ -2,8 +2,7 @@ package org.example.infrastructure.Database;
 
 import jakarta.persistence.*;
 import org.example.domain.model.Especialidad;
-import org.example.domain.model.Paciente;
-
+import org.example.domain.model.EstadoCita;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -24,14 +23,18 @@ public class CitaEntity {
     @Enumerated(EnumType.STRING)
     private Especialidad especialidad;
 
+    @Enumerated(EnumType.STRING)
+    private EstadoCita estadoCita;
+
     public CitaEntity() {
     }
 
-    public CitaEntity(UUID id, PacienteEntity paciente, LocalDateTime fechaHora, Especialidad especialidad) {
+    public CitaEntity(UUID id, PacienteEntity paciente, LocalDateTime fechaHora, Especialidad especialidad, EstadoCita estadoCita) {
         this.id = id;
         this.paciente = paciente;
         this.fechaHora = fechaHora;
         this.especialidad = especialidad;
+        this.estadoCita = estadoCita;
     }
 
     public UUID getId() { return id; }
@@ -42,5 +45,7 @@ public class CitaEntity {
     public void setFechaHora(LocalDateTime fechaHora) { this.fechaHora = fechaHora; }
     public Especialidad getEspecialidad() { return especialidad; }
     public void setEspecialidad(Especialidad especialidad) { this.especialidad = especialidad; }
+    public EstadoCita getEstadoCita() { return estadoCita; }
+    public void setEstadoCita(EstadoCita estadoCita) { this.estadoCita = estadoCita; }
 
 }

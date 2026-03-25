@@ -27,7 +27,13 @@ public class AgendarCitaUseCase {
         List<Cita> citasDelDia = citaRepository.obtenerPorFecha(cita.getFechaHora().toLocalDate());
         new ReglaSinEmpalmes().validar(cita, citasDelDia);
 
-        return citaRepository.guardar(cita);
+        Cita citaConEstado = new Cita(
+                cita.getPaciente(),
+                cita.getFechaHora(),
+                cita.getEspecialidad()
+        );
+
+        return citaRepository.guardar(citaConEstado);
     }
     public Cita obtenerPorId(UUID id) {
         return citaRepository.obtenerPorId(id);
