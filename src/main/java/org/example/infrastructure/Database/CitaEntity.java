@@ -2,18 +2,22 @@ package org.example.infrastructure.Database;
 
 import jakarta.persistence.*;
 import org.example.domain.model.Especialidad;
+import org.example.domain.model.Paciente;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "citas_medicas")
 public class CitaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    private String nombrePaciente;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "paciente_id")
+    private PacienteEntity paciente;
 
     private LocalDateTime fechaHora;
 
@@ -23,16 +27,17 @@ public class CitaEntity {
     public CitaEntity() {
     }
 
-    public CitaEntity(String nombrePaciente, LocalDateTime fechaHora, Especialidad especialidad) {
-        this.nombrePaciente = nombrePaciente;
+    public CitaEntity(UUID id, PacienteEntity paciente, LocalDateTime fechaHora, Especialidad especialidad) {
+        this.id = id;
+        this.paciente = paciente;
         this.fechaHora = fechaHora;
         this.especialidad = especialidad;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getNombrePaciente() { return nombrePaciente; }
-    public void setNombrePaciente(String nombrePaciente) { this.nombrePaciente = nombrePaciente; }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
+    public PacienteEntity paciente() { return paciente; }
+    public void setPaciente(PacienteEntity paciente) { this.paciente = paciente; }
     public LocalDateTime getFechaHora() { return fechaHora; }
     public void setFechaHora(LocalDateTime fechaHora) { this.fechaHora = fechaHora; }
     public Especialidad getEspecialidad() { return especialidad; }

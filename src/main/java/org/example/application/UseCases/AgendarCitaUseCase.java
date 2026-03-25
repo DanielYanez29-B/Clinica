@@ -7,6 +7,7 @@ import org.example.domain.rules.ReglaSinEmpalmes;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 
 
 public class AgendarCitaUseCase {
@@ -27,6 +28,9 @@ public class AgendarCitaUseCase {
         new ReglaSinEmpalmes().validar(cita, citasDelDia);
 
         return citaRepository.guardar(cita);
+    }
+    public Cita obtenerPorId(UUID id) {
+        return citaRepository.obtenerPorId(id);
     }
 
 

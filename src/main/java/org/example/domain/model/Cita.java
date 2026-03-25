@@ -1,17 +1,18 @@
 package org.example.domain.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Cita {
 
-    private Long id;
-    private String nombrePaciente;
+    private UUID id;
+    private Paciente paciente;
     private LocalDateTime fechaHora;
     private Especialidad especialidad;
 
-    public Cita(long id, String nombrePaciente, LocalDateTime fechaHora, Especialidad especialidad) {
+    public Cita(UUID id, Paciente paciente, LocalDateTime fechaHora, Especialidad especialidad) {
         this.id = id;
-        this.nombrePaciente = nombrePaciente;
+        this.paciente = paciente;
         this.fechaHora = fechaHora;
         this.especialidad = especialidad;
 
@@ -19,27 +20,27 @@ public class Cita {
     }
 
     //Constructor sin ID
-    public Cita(String nombrePaciente, LocalDateTime fechaHora) {
-        this.nombrePaciente = nombrePaciente;
+    public Cita(Paciente paciente, LocalDateTime fechaHora) {
+        this.paciente = paciente;
         this.fechaHora = fechaHora;
     }
 
     public Cita(){}
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public String getNombrePaciente() {
-        return nombrePaciente;
+    public Paciente getPaciente() {
+        return paciente;
     }
 
     public void setNombrePaciente(String nombrePaciente) {
-        this.nombrePaciente = nombrePaciente;
+        this.paciente = paciente;
     }
 
     public LocalDateTime getFechaHora() {

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/citas")
@@ -40,12 +41,12 @@ public class CitaController {
     }
 
     @PutMapping("/{id}")
-    public Cita actualizarCita(@PathVariable Long id, @RequestBody Cita cita) {
+    public Cita actualizarCita(@PathVariable UUID id, @RequestBody Cita cita) {
         return actualizarCitaUseCase.ejecutar(id, cita);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarCita(@PathVariable Long id) {
+    public ResponseEntity<String> eliminarCita(@PathVariable UUID id) {
         eliminarCitaUseCase.ejecutar(id);
         return ResponseEntity.ok("Cita con folio " + id + " eliminada exitosamente.");
     }

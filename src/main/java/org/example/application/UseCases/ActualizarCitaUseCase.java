@@ -4,6 +4,8 @@ import org.example.application.CitaRepositoryPort;
 import org.example.domain.model.Cita;
 import org.example.domain.rules.ReglaHorarioLaboral;
 
+import java.util.UUID;
+
 public class ActualizarCitaUseCase {
     private final CitaRepositoryPort citaRepository;
     private final ReglaHorarioLaboral reglaHorario;
@@ -13,7 +15,7 @@ public class ActualizarCitaUseCase {
         this.reglaHorario = reglaHorario;
     }
 
-    public Cita ejecutar(Long id, Cita cita) {
+    public Cita ejecutar(UUID id, Cita cita) {
         reglaHorario.validar(cita.getFechaHora().toLocalTime());
         return citaRepository.actualizar(id, cita);
     }
