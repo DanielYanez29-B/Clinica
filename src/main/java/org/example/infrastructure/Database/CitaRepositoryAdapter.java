@@ -34,7 +34,10 @@ public class CitaRepositoryAdapter implements CitaRepositoryPort {
                 pacienteEntity,
                 cita.getFechaHora(),
                 cita.getEspecialidad(),
-                cita.getEstadoCita()
+                cita.getEstadoCita(),
+                cita.getDoctorId(),
+                cita.getRecursoFisicoId()
+
         );
 
         CitaEntity guardada = repository.save(entity);
@@ -76,6 +79,8 @@ public class CitaRepositoryAdapter implements CitaRepositoryPort {
         entity.setFechaHora(cita.getFechaHora());
         entity.setEspecialidad(cita.getEspecialidad());
         entity.setEstadoCita(cita.getEstadoCita());
+        entity.setDoctorId(cita.getDoctorId());
+        entity.setRecursoFisicoId(cita.getRecursoFisicoId());
 
         PacienteEntity pacienteEntity = entity.paciente();
         if (pacienteEntity != null) {
@@ -103,7 +108,9 @@ public class CitaRepositoryAdapter implements CitaRepositoryPort {
                 entidad.getId(),
                 paciente,
                 entidad.getFechaHora(),
-                entidad.getEspecialidad()
+                entidad.getEspecialidad(),
+                entidad.getDoctorId(),
+                entidad.getRecursoFisicoId()
         );
         citaDominio.setEstadoCita(entidad.getEstadoCita());
 

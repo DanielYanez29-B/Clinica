@@ -1,6 +1,7 @@
 package org.example.infrastructure.config;
 
 import org.example.application.CitaRepositoryPort;
+import org.example.application.DoctorRepositoryPort;
 import org.example.application.UseCases.ActualizarCitaUseCase;
 import org.example.application.UseCases.AgendarCitaUseCase;
 import org.example.application.UseCases.ConsultarCitasUseCase;
@@ -27,8 +28,12 @@ public class ClinicaConfig {
     }
 
     @Bean
-    public AgendarCitaUseCase agendarCitaUseCase(ReglaHorarioLaboral regla, CitaRepositoryPort citaRepository) {
-        return new AgendarCitaUseCase(regla, citaRepository);
+    public AgendarCitaUseCase agendarCitaUseCase
+            (ReglaHorarioLaboral regla,
+             CitaRepositoryPort citaRepository,
+             DoctorRepositoryPort doctorRepository) {
+
+        return new AgendarCitaUseCase(regla, citaRepository, doctorRepository);
     }
 
     @Bean

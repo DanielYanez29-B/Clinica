@@ -12,21 +12,43 @@ public class Cita {
     private LocalDateTime fechaHora;
     private Especialidad especialidad;
     private EstadoCita estadoCita;
+    private UUID doctorId;
+    // private UUID recursoFisicoId;
 
-    public Cita(UUID id, Paciente paciente, LocalDateTime fechaHora, Especialidad especialidad) {
+    public Cita(UUID id,
+                Paciente paciente,
+                LocalDateTime fechaHora,
+                Especialidad especialidad,
+                UUID doctorId,
+                UUID recursoFisicoId) {
         this.id = id;
         this.paciente = paciente;
         this.fechaHora = fechaHora;
         this.especialidad = especialidad;
         definirEstadoInicial();
+        if (doctorId == null) {
+            throw new IllegalArgumentException("El ID del doctor no puede ser nulo.");
+        }
+        this.doctorId = doctorId;
+        //this.recursoFisicoId = recursoFisicoId;
+
     }
 
     //Constructor sin ID
-    public Cita(Paciente paciente, LocalDateTime fechaHora, Especialidad especialidad) {
+    public Cita(Paciente paciente,
+                LocalDateTime fechaHora,
+                Especialidad especialidad,
+                UUID doctorId,
+                UUID recursoFisicoId) {
         this.paciente = paciente;
         this.fechaHora = fechaHora;
         this.especialidad = especialidad;
-        definirEstadoInicial();
+        definirEstadoInicial();if (doctorId == null) {
+            throw new IllegalArgumentException("El ID del doctor no puede ser nulo.");
+        }
+        this.doctorId = doctorId;
+        //this.recursoFisicoId = recursoFisicoId;
+
     }
 
     public Cita() {
@@ -75,6 +97,11 @@ public class Cita {
         this.estadoCita = estadoCita;
     }
 
+    public UUID getDoctorId() {
+        return doctorId;
+    }
+
+
     public Dinero calcularTotal() {
         return this.especialidad.getCostoBase();
     }
@@ -85,5 +112,9 @@ public class Cita {
                     ? EstadoCita.PAGADA
                     : EstadoCita.PENDIENTE;
         }
+    }
+
+    public UUID getRecursoFisicoId() {
+        return null; // Implementar lógica para obtener el ID del recurso físico asociado a la cita
     }
 }

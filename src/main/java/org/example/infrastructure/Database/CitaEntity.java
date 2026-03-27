@@ -26,15 +26,24 @@ public class CitaEntity {
     @Enumerated(EnumType.STRING)
     private EstadoCita estadoCita;
 
+    @Column(name = "doctor_id", nullable = false)
+    private UUID doctorId;
+
+    @Column(name = "recurso_fisico_id", nullable = true)
+    private UUID recursoFisicoId;
+
     public CitaEntity() {
     }
 
-    public CitaEntity(UUID id, PacienteEntity paciente, LocalDateTime fechaHora, Especialidad especialidad, EstadoCita estadoCita) {
+    public CitaEntity(UUID id, PacienteEntity paciente, LocalDateTime fechaHora, Especialidad especialidad, EstadoCita estadoCita, UUID doctorId, UUID recursoFisicoId) {
         this.id = id;
         this.paciente = paciente;
         this.fechaHora = fechaHora;
         this.especialidad = especialidad;
         this.estadoCita = estadoCita;
+        this.doctorId = doctorId;
+        this.recursoFisicoId = recursoFisicoId;
+
     }
 
     public UUID getId() { return id; }
@@ -47,5 +56,8 @@ public class CitaEntity {
     public void setEspecialidad(Especialidad especialidad) { this.especialidad = especialidad; }
     public EstadoCita getEstadoCita() { return estadoCita; }
     public void setEstadoCita(EstadoCita estadoCita) { this.estadoCita = estadoCita; }
-
+    public UUID getDoctorId() { return doctorId; }
+    public void setDoctorId(UUID doctorId) { this.doctorId = doctorId; }
+    public UUID getRecursoFisicoId() { return recursoFisicoId; }
+    public void setRecursoFisicoId(UUID recursoFisicoId) { this.recursoFisicoId = recursoFisicoId; }
 }
