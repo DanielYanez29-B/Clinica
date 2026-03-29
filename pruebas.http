@@ -3,12 +3,8 @@ POST http://localhost:8080/api/citas
 Content-Type: application/json
 
 {
-  "paciente": {
-    "nombre": "Juan Perez",
-    "tipo": "NUEVO"
-  },
-  "fechaHora": "2026-03-30T10:00:00",
-  "especialidad": "CARDIOLOGO",
+  "pacienteId": "11111111-1111-1111-1111-111111111111",
   "doctorId": "123e4567-e89b-12d3-a456-426614174000",
-  "recursoFisicoId": null
+  "especialidad": "CARDIOLOGO",
+  "fechaHora": "2026-04-02T06:00:00"
 }

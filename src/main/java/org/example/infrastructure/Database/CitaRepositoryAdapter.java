@@ -16,22 +16,21 @@ import java.util.stream.Collectors;
 @Service
 public class CitaRepositoryAdapter implements CitaRepositoryPort {
     private final SpringDataCitaRepository repository;
+    private final SpringDataPacienteAdapter pacienteRepository;
 
-    public CitaRepositoryAdapter(SpringDataCitaRepository repository) {
+    public CitaRepositoryAdapter(SpringDataCitaRepository repository,
+                                 SpringDataPacienteAdapter pacienteRepository) {
         this.repository = repository;
+        this.pacienteRepository = pacienteRepository;
     }
 
     @Override
     public Cita guardar(Cita cita) {
-        PacienteEntity pacienteEntity = new PacienteEntity(
-                cita.getPaciente().getId(),
-                cita.getPaciente().getNombre(),
-                cita.getPaciente().getTipo()
-        );
+        PacienteEntity pacienteProxy = pacienteRepository.getReferenceById(cita.getPacienteId());
 
         CitaEntity entity = new CitaEntity(
                 cita.getId(),
-                pacienteEntity,
+                pacienteProxy,
                 cita.getFechaHora(),
                 cita.getEspecialidad(),
                 cita.getEstadoCita(),
@@ -82,10 +81,8 @@ public class CitaRepositoryAdapter implements CitaRepositoryPort {
         entity.setDoctorId(cita.getDoctorId());
         entity.setRecursoFisicoId(cita.getRecursoFisicoId());
 
-        PacienteEntity pacienteEntity = entity.paciente();
-        if (pacienteEntity != null) {
-            pacienteEntity.setNombre(cita.getPaciente().getNombre());
-            pacienteEntity.setTipo(cita.getPaciente().getTipo());
+        if (!entity.paciente().getId().equals(cita.getPacienteId())) {
+            entity.setPaciente(pacienteRepository.getReferenceById(cita.getPacienteId()));
         }
 
         CitaEntity actualizada = repository.save(entity);
@@ -98,19 +95,14 @@ public class CitaRepositoryAdapter implements CitaRepositoryPort {
     }
 
     private Cita mapearADominio(CitaEntity entidad) {
-        Paciente paciente = new Paciente(
-                entidad.paciente().getId(),
-                entidad.paciente().getNombre(),
-                entidad.paciente().getTipo()
-        );
-
         Cita citaDominio = new Cita(
                 entidad.getId(),
-                paciente,
+                entidad.paciente().getId(),
                 entidad.getFechaHora(),
                 entidad.getEspecialidad(),
                 entidad.getDoctorId(),
-                entidad.getRecursoFisicoId()
+                entidad.getRecursoFisicoId(),
+                entidad.getEstadoCita()
         );
         citaDominio.setEstadoCita(entidad.getEstadoCita());
 

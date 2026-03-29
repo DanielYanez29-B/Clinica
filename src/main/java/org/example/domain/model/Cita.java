@@ -1,59 +1,52 @@
 package org.example.domain.model;
 
-import org.example.domain.model.valueobjects.Dinero;
 
+import org.example.domain.model.valueobjects.Dinero;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Cita {
 
     private UUID id;
-    private Paciente paciente;
+    private UUID pacienteId;
     private LocalDateTime fechaHora;
     private Especialidad especialidad;
     private EstadoCita estadoCita;
     private UUID doctorId;
     // private UUID recursoFisicoId;
 
+    // Constructor con ID (para recuperar de BD)
     public Cita(UUID id,
-                Paciente paciente,
+                UUID pacienteId,
                 LocalDateTime fechaHora,
                 Especialidad especialidad,
                 UUID doctorId,
-                UUID recursoFisicoId) {
-        this.id = id;
-        this.paciente = paciente;
-        this.fechaHora = fechaHora;
-        this.especialidad = especialidad;
-        definirEstadoInicial();
-        if (doctorId == null) {
-            throw new IllegalArgumentException("El ID del doctor no puede ser nulo.");
-        }
-        this.doctorId = doctorId;
-        //this.recursoFisicoId = recursoFisicoId;
-
+                UUID recursoFisicoId,
+                EstadoCita estadoCita) {
+        this.id = Objects.requireNonNull(id, "El ID de la cita no puede ser nulo.");
+        this.pacienteId = Objects.requireNonNull(pacienteId, "El ID del paciente no puede ser nulo.");
+        this.fechaHora = Objects.requireNonNull(fechaHora, "La fecha/hora no puede ser nula.");
+        this.especialidad = Objects.requireNonNull(especialidad, "La especialidad no puede ser nula.");
+        this.doctorId = Objects.requireNonNull(doctorId, "El ID del doctor no puede ser nulo.");
+        this.estadoCita = Objects.requireNonNull(estadoCita, "El estado de la cita no puede ser nulo.");
     }
-
-    //Constructor sin ID
-    public Cita(Paciente paciente,
-                LocalDateTime fechaHora,
-                Especialidad especialidad,
-                UUID doctorId,
-                UUID recursoFisicoId) {
-        this.paciente = paciente;
-        this.fechaHora = fechaHora;
-        this.especialidad = especialidad;
-        definirEstadoInicial();if (doctorId == null) {
-            throw new IllegalArgumentException("El ID del doctor no puede ser nulo.");
-        }
-        this.doctorId = doctorId;
-        //this.recursoFisicoId = recursoFisicoId;
-
-    }
-
     public Cita() {
+        // Constructor vacío para frameworks que lo requieran (e.g., JPA, MapStruct)
     }
-
+    // Constructor sin ID (para crear Cita nueva)
+    public Cita(UUID pacienteId,
+                LocalDateTime fechaHora,
+                Especialidad especialidad,
+                UUID doctorId,
+                UUID recursoFisicoId,
+                EstadoCita estadoCita) {
+        this.pacienteId = Objects.requireNonNull(pacienteId, "El ID del paciente no puede ser nulo.");
+        this.fechaHora = Objects.requireNonNull(fechaHora, "La fecha/hora no puede ser nula.");
+        this.especialidad = Objects.requireNonNull(especialidad, "La especialidad no puede ser nula.");
+        this.doctorId = Objects.requireNonNull(doctorId, "El ID del doctor no puede ser nulo.");
+        this.estadoCita = Objects.requireNonNull(estadoCita, "El estado de la cita no puede ser nulo.");
+    }
     public UUID getId() {
         return id;
     }
@@ -62,12 +55,12 @@ public class Cita {
         this.id = id;
     }
 
-    public Paciente getPaciente() {
-        return paciente;
+    public UUID getPacienteId() {
+        return pacienteId;
     }
 
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
+    public void setPacienteId(UUID pacienteId) {
+        this.pacienteId = pacienteId;
     }
 
     public LocalDateTime getFechaHora() {
@@ -80,6 +73,10 @@ public class Cita {
 
     public Especialidad getEspecialidad() {
         return especialidad;
+    }
+
+    public void setEspecialidad(Especialidad especialidad) {
+        this.especialidad = especialidad;
     }
 
     public LocalDateTime getFechaHoraFin() {
@@ -106,15 +103,14 @@ public class Cita {
         return this.especialidad.getCostoBase();
     }
 
-    private void definirEstadoInicial() {
-        if (this.paciente != null && this.paciente.getTipo() != null) {
-            this.estadoCita = (this.paciente.getTipo() == TipoPaciente.NUEVO)
-                    ? EstadoCita.PAGADA
-                    : EstadoCita.PENDIENTE;
-        }
-    }
 
     public UUID getRecursoFisicoId() {
         return null; // Implementar lógica para obtener el ID del recurso físico asociado a la cita
+    }
+
+    public void setDoctorId(UUID doctorId) {this.doctorId = doctorId;}
+
+    public void setRecursoFisicoId(UUID recursoFisicoId) {
+        // Implementar lógica para establecer el ID del recurso físico asociado a la cita
     }
 }

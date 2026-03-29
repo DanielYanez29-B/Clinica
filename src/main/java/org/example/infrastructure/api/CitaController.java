@@ -4,14 +4,19 @@ import org.example.application.UseCases.ActualizarCitaUseCase;
 import org.example.application.UseCases.AgendarCitaUseCase;
 import org.example.application.UseCases.ConsultarCitasUseCase;
 import org.example.application.UseCases.EliminarCitaUseCase;
+import org.example.application.dto.request.ActualizarCitaRequest;
+import org.example.application.dto.request.CrearCitaRequest;
+import org.example.application.dto.response.CitaResponse;
 import org.example.domain.exception.CitaNoEncontradaException;
 import org.example.domain.model.Cita;
+import org.example.infrastructure.mapper.CitaMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/citas")
@@ -34,24 +39,41 @@ public class CitaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cita agendarNuevaCita(@RequestBody Cita nuevaCita) {
-        return useCase.ejecutar(nuevaCita);
+    public CitaResponse agendarNuevaCita(@RequestBody CrearCitaRequest request) {
+        Cita citaAgendada = useCase.ejecutar(request);
+
+        return CitaMapper.toResponse(citaAgendada);
     }
 
     @GetMapping
-    public List<Cita> obtenerCitas() {
-        return consultarCitasUseCase.ejecutar();
+    public List<CitaResponse> obtenerCitas() {
+        List<Cita> citas = consultarCitasUseCase.ejecutar();
+         return citas.stream()
+                .map(CitaMapper::toResponse)
+                .collect(Collectors.toList());
     }
+
+    @GetMapping("/{id}")
+    public CitaResponse obtenerCitaPorId(@PathVariable UUID id) {
+        Cita cita = useCase.obtenerPorId(id);
+        if (cita == null) {
+            throw new CitaNoEncontradaException("Cita con ID " + id + " no encontrada.");
+        }
+        return CitaMapper.toResponse(cita);
+    }
+
 
     @PutMapping("/{id}")
-    public Cita actualizarCita(@PathVariable UUID id, @RequestBody Cita cita) {
-        return actualizarCitaUseCase.ejecutar(id, cita);
-    }
+    public CitaResponse actualizarCita(@PathVariable UUID id,
+                                       @RequestBody ActualizarCitaRequest request) {
 
+        Cita citaActualizada = actualizarCitaUseCase.ejecutar(id, request);
+        return CitaMapper.toResponse(citaActualizada);
+    }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarCita(@PathVariable UUID id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void eliminarCita(@PathVariable UUID id) {
         eliminarCitaUseCase.ejecutar(id);
-        return ResponseEntity.ok("Cita con folio " + id + " eliminada exitosamente.");
     }
 
     @ExceptionHandler(RuntimeException.class)

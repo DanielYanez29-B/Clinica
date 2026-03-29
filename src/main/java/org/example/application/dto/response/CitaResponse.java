@@ -1,64 +1,61 @@
-package org.example.infrastructure.Database;
+package org.example.application.dto.response;
 
-import jakarta.persistence.*;
 import org.example.domain.model.Especialidad;
 import org.example.domain.model.EstadoCita;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
-@Table(name = "citas_medicas")
-public class CitaEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+public class CitaResponse {
     private UUID id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "paciente_id")
-    private PacienteEntity paciente;
-
+    private UUID pacienteId;
     private LocalDateTime fechaHora;
-
-    @Enumerated(EnumType.STRING)
+    private LocalDateTime fechaHoraFin;
     private Especialidad especialidad;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "VARCHAR(50) DEFAULT 'PENDIENTE'")
     private EstadoCita estadoCita;
-
-    @Column(name = "doctor_id", nullable = false)
     private UUID doctorId;
-
-    @Column(name = "recurso_fisico_id", nullable = true)
     private UUID recursoFisicoId;
 
-    public CitaEntity() {
-    }
+    public CitaResponse() {}
 
-    public CitaEntity(UUID id, PacienteEntity paciente, LocalDateTime fechaHora, Especialidad especialidad, EstadoCita estadoCita, UUID doctorId, UUID recursoFisicoId) {
+    public CitaResponse(UUID id, UUID pacienteId,
+                        LocalDateTime fechaHora,
+                        LocalDateTime fechaHoraFin,
+                        Especialidad especialidad,
+                        EstadoCita estadoCita,
+                        UUID doctorId,
+                        UUID recursoFisicoId) {
         this.id = id;
-        this.paciente = paciente;
+        this.pacienteId = pacienteId;
         this.fechaHora = fechaHora;
+        this.fechaHoraFin = fechaHoraFin;
         this.especialidad = especialidad;
         this.estadoCita = estadoCita;
         this.doctorId = doctorId;
         this.recursoFisicoId = recursoFisicoId;
-
     }
 
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
-    public PacienteEntity paciente() { return paciente; }
-    public void setPaciente(PacienteEntity paciente) { this.paciente = paciente; }
+
+    public UUID getPacienteId() { return pacienteId; }
+    public void setPacienteId(UUID pacienteId) { this.pacienteId = pacienteId; }
+
     public LocalDateTime getFechaHora() { return fechaHora; }
     public void setFechaHora(LocalDateTime fechaHora) { this.fechaHora = fechaHora; }
+
+    public LocalDateTime getFechaHoraFin() { return fechaHoraFin; }
+    public void setFechaHoraFin(LocalDateTime fechaHoraFin) { this.fechaHoraFin = fechaHoraFin; }
+
     public Especialidad getEspecialidad() { return especialidad; }
     public void setEspecialidad(Especialidad especialidad) { this.especialidad = especialidad; }
+
     public EstadoCita getEstadoCita() { return estadoCita; }
     public void setEstadoCita(EstadoCita estadoCita) { this.estadoCita = estadoCita; }
+
     public UUID getDoctorId() { return doctorId; }
     public void setDoctorId(UUID doctorId) { this.doctorId = doctorId; }
+
     public UUID getRecursoFisicoId() { return recursoFisicoId; }
     public void setRecursoFisicoId(UUID recursoFisicoId) { this.recursoFisicoId = recursoFisicoId; }
 }

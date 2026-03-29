@@ -2,11 +2,13 @@ package org.example.infrastructure.config;
 
 import org.example.application.CitaRepositoryPort;
 import org.example.application.DoctorRepositoryPort;
+import org.example.application.PacienteRepositoryPort;
 import org.example.application.UseCases.ActualizarCitaUseCase;
 import org.example.application.UseCases.AgendarCitaUseCase;
 import org.example.application.UseCases.ConsultarCitasUseCase;
 import org.example.application.UseCases.EliminarCitaUseCase;
 import org.example.domain.rules.ReglaHorarioLaboral;
+import org.example.domain.services.ReglasDeAgenda;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,12 +30,18 @@ public class ClinicaConfig {
     }
 
     @Bean
-    public AgendarCitaUseCase agendarCitaUseCase
-            (ReglaHorarioLaboral regla,
-             CitaRepositoryPort citaRepository,
-             DoctorRepositoryPort doctorRepository) {
+    public ReglasDeAgenda reglasDeAgenda(ReglaHorarioLaboral reglaHorario,
+                                         DoctorRepositoryPort doctorRepository,
+                                         CitaRepositoryPort citaRepository) {
+        return new ReglasDeAgenda(reglaHorario, doctorRepository, citaRepository);
+    }
 
-        return new AgendarCitaUseCase(regla, citaRepository, doctorRepository);
+
+    @Bean
+    public AgendarCitaUseCase agendarCitaUseCase(ReglasDeAgenda reglasDeAgenda,
+                                                 CitaRepositoryPort citaRepository,
+                                                 PacienteRepositoryPort pacienteRepository) {
+        return new AgendarCitaUseCase(reglasDeAgenda, citaRepository, pacienteRepository);
     }
 
     @Bean
@@ -42,8 +50,8 @@ public class ClinicaConfig {
     }
 
     @Bean
-    public ActualizarCitaUseCase actualizarCitaUseCase(CitaRepositoryPort citaRepository, ReglaHorarioLaboral reglaHorario) {
-        return new ActualizarCitaUseCase(citaRepository, reglaHorario);
+    public ActualizarCitaUseCase actualizarCitaUseCase(CitaRepositoryPort citaRepository, ReglasDeAgenda reglasDeAgenda) {
+        return new ActualizarCitaUseCase(citaRepository, reglasDeAgenda);
     }
 
     @Bean
