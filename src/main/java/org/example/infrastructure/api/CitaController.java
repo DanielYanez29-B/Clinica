@@ -62,7 +62,6 @@ public class CitaController {
         return CitaMapper.toResponse(cita);
     }
 
-
     @PutMapping("/{id}")
     public CitaResponse actualizarCita(@PathVariable UUID id,
                                        @RequestBody ActualizarCitaRequest request) {
@@ -84,5 +83,10 @@ public class CitaController {
     @ExceptionHandler(CitaNoEncontradaException.class)
     public ResponseEntity<String> manejarNoEncontrado(CitaNoEncontradaException ex) {
         return ResponseEntity.status(404).body(ex.getMessage());
+    }
+
+    @GetMapping("/api/health")
+    public String health() {
+        return "OK";
     }
 }
